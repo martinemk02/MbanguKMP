@@ -1,0 +1,15 @@
+workflows:
+  ios-build:
+    name: Build iOS Bonjour
+    instance_type: mac_mini_m2
+    scripts:
+      - name: Build iOS App
+        script: |
+          ./gradlew :composeApp:assembleDebug
+          xcodebuild -project iosApp/iosApp.xcodeproj \
+                     -scheme iosApp \
+                     -configuration Debug \
+                     -sdk iphonesimulator \
+                     build CODE_SIGNING_ALLOWED=NO
+    artifacts:
+      - iosApp/build/Release-iphonesimulator/*.app
