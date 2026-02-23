@@ -21,20 +21,25 @@ workflows:
   ios-kmp-workflow:
     name: Build iOS MbanguKMP
     instance_type: mac_mini_m2
-    max_build_duration: 60
     scripts:
-      - name: Build Kotlin Framework
-        script: ./gradlew :composeApp:embedAndSignAppleFrameworkForXcode
-      - name: Build iOS App
+      - name: Fix permissions
+        script: chmod +x gradlew
+      - name: Xcode Build
         script: |
+          # On lance directement Xcode. 
+          # Xcode appellera Gradle automatiquement pour les ressources et le framework.
           xcodebuild -project iosApp/iosApp.xcodeproj \
             -scheme iosApp \
             -configuration Debug \
             -sdk iphonesimulator \
             -destination 'platform=iOS Simulator,name=iPhone 15' \
-            build CODE_SIGNING_ALLOWED=NO
+            build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            PRODUCT_BUNDLE_IDENTIFIER="com.votre.nom.mbangukmp"
     artifacts:
       - iosApp/build/Release-iphonesimulator/*.app
+      - ~/Library/Developer/Xcode/DerivedData/**/Build/Products/Debug-iphonesimulator/*.app
 
 #workflows:
 #  ios-build:
