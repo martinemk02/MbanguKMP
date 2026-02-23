@@ -3,10 +3,10 @@ scripts:
     script: chmod +x gradlew
   - name: Build Kotlin Framework
     script: |
-      # Cette commande force la compilation du framework pour simulateur iOS
-      ./gradlew :composeApp:assembleDebug \
+      # On nettoie et on compile uniquement ce qui est vital
+      ./gradlew clean :composeApp:assembleDebug \
         -Pkotlin.native.ignoreDisabledTargets=true \
-        --no-daemon
+        --no-daemon --stacktrace
   - name: Build iOS App
     script: |
       xcodebuild -project iosApp/iosApp.xcodeproj \
@@ -14,7 +14,7 @@ scripts:
         -configuration Debug \
         -sdk iphonesimulator \
         -destination 'platform=iOS Simulator,name=iPhone 15' \
-        build CODE_SIGNING_ALLOWED=NO
+        build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
 
 workflows:
   ios-kmp-workflow:
