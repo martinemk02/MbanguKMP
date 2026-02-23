@@ -4,8 +4,9 @@ scripts:
   - name: Build Kotlin Framework
     script: |
       # On nettoie et on compile uniquement ce qui est vital
-      ./gradlew clean :composeApp:assembleDebug \
+      ./gradlew :composeApp:assembleDebug \
         -Pkotlin.native.ignoreDisabledTargets=true \
+        -Pcompose.ios.resources.targetArchs="arm64;x86_64" \
         --no-daemon --stacktrace
   - name: Build iOS App
     script: |
